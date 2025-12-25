@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OceanView Hotel</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    body {
+      background-color: #f0f2f5;
+    }
+    .room-card img {
+      height: 200px;
+      object-fit: cover;
+    }
+    .gallery img {
+      height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">OceanView Hotel</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#rooms">Rooms</a></li>
+          <li class="nav-item"><a class="nav-link" href="#gallery">Gallery</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="text-center py-5 bg-white">
+    <h2 class="display-5 fw-semibold mb-3">Luxury Rooms & Great Views</h2>
+    <p class="text-muted mx-auto mb-4" style="max-width: 600px">
+      Book your stay at OceanView Hotel and enjoy beachfront views, 5-star
+      amenities, and excellent service.
+    </p>
+    <button class="btn btn-primary btn-lg">Explore Rooms</button>
+  </section>
+
+  <!-- Rooms -->
+  <section class="container py-5" id="rooms">
+    <h3 class="mb-4 text-center">Our Rooms</h3>
+    <div class="row g-4">
+
+      <!-- Room 1 -->
+      <div class="col-md-4">
+        <div class="card room-card">
+          <img src="https://source.unsplash.com/400x250/?hotel,room,1" class="card-img-top" />
+          <div class="card-body">
+            <h5 class="card-title">Deluxe Room</h5>
+            <p class="card-text">
+              Spacious room with AC, Wi-Fi and room service.
+            </p>
+            <button class="btn btn-primary" onclick="bookRoom(this)">
+              Book Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Room 2 -->
+      <div class="col-md-4">
+        <div class="card room-card">
+          <img src="https://source.unsplash.com/400x250/?hotel,room,2" class="card-img-top" />
+          <div class="card-body">
+            <h5 class="card-title">Suite Room</h5>
+            <p class="card-text">
+              Premium suite with luxury facilities and comfort.
+            </p>
+            <button class="btn btn-primary" onclick="bookRoom(this)">
+              Book Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Room 3 -->
+      <div class="col-md-4">
+        <div class="card room-card">
+          <img src="https://source.unsplash.com/400x250/?hotel,room,3" class="card-img-top" />
+          <div class="card-body">
+            <h5 class="card-title">Ocean View Room</h5>
+            <p class="card-text">
+              Beautiful ocean-facing room with balcony view.
+            </p>
+            <button class="btn btn-primary" onclick="bookRoom(this)">
+              Book Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="container py-5" id="gallery">
+    <h3 class="mb-4 text-center">Gallery</h3>
+    <div class="row g-3 gallery">
+      <div class="col-6 col-md-3">
+        <img src="https://source.unsplash.com/300x200/?hotel,lobby" class="w-100" />
+      </div>
+      <div class="col-6 col-md-3">
+        <img src="https://source.unsplash.com/300x200/?hotel,pool" class="w-100" />
+      </div>
+      <div class="col-6 col-md-3">
+        <img src="https://source.unsplash.com/300x200/?hotel,restaurant" class="w-100" />
+      </div>
+      <div class="col-6 col-md-3">
+        <img src="https://source.unsplash.com/300x200/?hotel,spa" class="w-100" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="container py-5" id="contact">
+    <h3 class="mb-4 text-center">Contact Us</h3>
+    <form onsubmit="sendMessage(event)" class="mx-auto" style="max-width: 600px">
+      <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" required />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" required />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Message</label>
+        <textarea class="form-control" id="message" rows="4" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Send Message</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-primary text-white text-center py-4">
+    © 2025 OceanView Hotel. All rights reserved.
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Booking API
+    async function bookRoom(btn) {
+      const roomType =
+        btn.closest(".card").querySelector(".card-title").innerText;
+
+      btn.disabled = true;
+      btn.innerText = "Booking...";
+
+      try {
+        const response = await fetch("http://localhost:5000/api/book", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: "Guest User",
+            email: "guest@example.com",
+            roomType: roomType,
+          }),
+        });
+
+        if (response.ok) {
+          alert("Room booked successfully!");
+        } else {
+          alert("Booking failed");
+        }
+      } catch (error) {
+        alert("Server error");
+      }
+
+      btn.innerText = "Book Now";
+      btn.disabled = false;
+    }
+
+    // Contact API
+    async function sendMessage(event) {
+      event.preventDefault();
+
+      try {
+        const response = await fetch("http://localhost:5000/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            message: document.getElementById("message").value,
+          }),
+        });
+
+        if (response.ok) {
+          alert("Message sent successfully!");
+          event.target.reset();
+        } else {
+          alert("Failed to send message");
+        }
+      } catch (error) {
+        alert("Server error");
+      }
+    }
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
